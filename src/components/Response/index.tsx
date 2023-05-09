@@ -4,6 +4,11 @@ import { View, Text, Image } from 'react-native';
 // MY IMPORTS
 import styles from './styles';
 
+type ListProps = {
+    id: string;
+    name: string;   
+}
+
 export function Response(){
     return(
         <View style={styles.container}>

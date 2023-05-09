@@ -4,35 +4,11 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView, SafeAr
 // MY IMPORTS
 import styles from './styles';
 import { Response } from '../../components/Response';
-import { useEffect } from 'react';
 
 export default function Home(){
     return(
         <SafeAreaView style={styles.container}>
-            <ScrollView style={styles.response}>
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-                <Response />
-            </ScrollView>          
+            <Text>Home</Text>
         </SafeAreaView>
     );
 }
