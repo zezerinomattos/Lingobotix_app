@@ -13,9 +13,6 @@ const styles = StyleSheet.create({
         borderColor: '#D9CCC1',
         position: 'absolute',
         bottom: 0,
-    },
-    buttonIcons: {
-
     }
 });
 
