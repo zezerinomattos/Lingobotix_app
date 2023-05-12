@@ -2,9 +2,9 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
-        width: '90%',
+        width: '100%',
         backgroundColor: '#A6A6A6',
-        marginVertical: 20,
+        marginVertical: 10,
         borderRadius: 8
     },
     titleContainer: {
@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
     },
     textTitle: {
         fontSize: 20,
-        color: '#BF6415'
+        color: '#0008',
+        fontWeight: 'bold'
     },
     buttonContainer:{
         width: '100%',

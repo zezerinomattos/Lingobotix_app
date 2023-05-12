@@ -9,8 +9,17 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         width: '100%',
-        alignItems:'center',
+        // alignItems:'center',
+        // justifyContent: 'center',
         backgroundColor: '#FFF',
+    },
+    listLevel:{
+        paddingHorizontal: 20,
+        marginTop: 24,
+        marginBottom: 50
+    },
+    listContent: {
+        paddingBottom: 60, // Ajuste o valor conforme necessário para evitar o corte do último item
     },
 });
 
