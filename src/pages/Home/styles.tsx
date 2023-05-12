@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         marginBottom: 50
     },
     listContent: {
-        paddingBottom: 60, // Ajuste o valor conforme necessário para evitar o corte do último item
+        paddingBottom: 30, // Ajuste o valor conforme necessário para evitar o corte do último item
     },
 });
 
