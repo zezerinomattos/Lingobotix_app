@@ -4,12 +4,12 @@
     "slug": "Lingobotix",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Lingobotix.png",
+    "icon": "./assets/LingoIcon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/Lingobotix.png",
+      "image": "./assets/imgResponse.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#083359"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -19,12 +19,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/Lingobotix.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/LingoIcon.png",
+        "backgroundColor": "#083359"
       }
     },
     "web": {
-      "favicon": "./assets/Lingobotix.png"
+      "favicon": "./assets/LingoIcon"
     }
   }
 }

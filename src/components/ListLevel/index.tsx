@@ -13,8 +13,9 @@ interface LevelProps {
         buttonTwo: string;
         buttonThree: string;
         buttonFour: string;
+        information: string;
     };
-    onPress: () => void;
+    onPress: (information: string, title: string) => void;
 }
 
 export function ListLevel({ data, onPress }: LevelProps){
@@ -24,7 +25,7 @@ export function ListLevel({ data, onPress }: LevelProps){
             <View style={styles.titleContainer}>
                 <Text style={styles.textTitle}>{data.title}</Text>
 
-                <TouchableOpacity onPress={onPress}>
+                <TouchableOpacity onPress={() => onPress(data.information, data.title)}>
                     <Image source={require('../../images/book.png')} style={{width: 30}} resizeMode="contain"  />
                 </TouchableOpacity>               
             </View>
