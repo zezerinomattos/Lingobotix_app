@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { View, Text, FlatList, Modal  } from 'react-native';
 
 // MY IMPORTS
@@ -7,6 +7,8 @@ import { Header } from '../../components/Header';
 import { Footer } from '../../components/Footer';
 import { ListLevel } from '../../components/ListLevel';
 import { ModalInformation } from '../../components/ModalInformation';
+
+import { AuthContext } from '../../context/AuthContext';
 
 type LevelProps = {
     id: string;
@@ -37,6 +39,8 @@ export default function Home(){
     const [modalInformationVisible, setModalInformationVisible] = useState(false);
     const[levelInformation, setLevelInformation] = useState<string[]>(['']);
 
+    const { signOut } = useContext(AuthContext);
+
     // FUNÇÃO DE ONPRESS DO BOTÃO DE INFORMAÇÃO DO NIVEL
     function handleInformationButton(title: string, information: string){
         setModalInformationVisible(true);
@@ -64,7 +68,7 @@ export default function Home(){
                 />
             </Modal>
 
-            <Footer />
+            <Footer onPress={signOut}/>
         </View>
     );
 }

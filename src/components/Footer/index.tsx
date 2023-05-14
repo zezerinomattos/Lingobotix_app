@@ -4,7 +4,12 @@ import { View, Image, TouchableOpacity } from 'react-native';
 // MY IMPORTS
 import styles from './styles';
 
-export function Footer(){
+interface FooterProps{
+    onPress: () => void;
+}
+
+export function Footer({ onPress }: FooterProps){
+    
     return(
         <View style={styles.container}>
             <TouchableOpacity >
@@ -21,6 +26,10 @@ export function Footer(){
 
             <TouchableOpacity >
                 <Image source={require('../../images/icone-worldwide.png')} style={{width: 30}} resizeMode="contain" />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={onPress}>
+                <Image source={require('../../images/exit.png')} style={{width: 30}} resizeMode="contain" />
             </TouchableOpacity>
         </View>
     );

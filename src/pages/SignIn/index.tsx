@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import React, {useState, useContext} from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 
 // MY IMPORTS
 import styles from './styles';
+
+import { AuthContext } from '../../context/AuthContext';
 
 
 export default function SignIn(){
@@ -12,8 +14,16 @@ export default function SignIn(){
 
     const [message, setMessage] = useState('');
 
+    // CHAMANDO O CONTEXT - CALLING THE CONTEXT
+    const { signIn, loading, signInError } = useContext(AuthContext);
+
     async function hendleLogin(){
-        alert(`email ${email} - password ${password}`);
+       if(email === '' || password === ''){
+        setMessage('Ops, preencha os campos!');
+        return;
+       }
+
+       await signIn({email, password});
     }
 
     return(
@@ -27,13 +37,20 @@ export default function SignIn(){
                 <TextInput style={styles.input} secureTextEntry={true} placeholder='Informe sua senha' placeholderTextColor={'#023E73'} value={password} onChangeText={setPassword}/>
 
                 {message && <Text style={styles.message}>{message}</Text>}
+                {signInError && <Text style={styles.message}>{signInError}</Text>}
 
                 <TouchableOpacity style={styles.button} onPress={hendleLogin}>
-                    <Text style={styles.textButton}>Entrar</Text>
+                    {
+                        loading ?
+                            <ActivityIndicator size={25} color={'#FFF'}/>
+                        :
+                            <Text style={styles.textButton}>Entrar</Text>
+                    }                  
                 </TouchableOpacity>
             </View>
-
-            <Image source={require('../../images/LingoP.png')} resizeMode='contain' style={{width: 150}}/>
+            {message === '' && signInError === '' &&
+                <Image source={require('../../images/LingoP.png')} resizeMode='contain' style={{width: 150}}/> 
+            }
         </View>
     );
 }
