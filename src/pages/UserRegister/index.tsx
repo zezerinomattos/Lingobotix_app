@@ -1,20 +1,15 @@
 import React, {useState, useContext} from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
-
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-import { StackParamsList } from '../../routes/auth.routes';
+import { View, Text, TouchableOpacity, TextInput, Image, ActivityIndicator } from 'react-native';
 
 // MY IMPORTS
 import styles from './styles';
 
 import { AuthContext } from '../../context/AuthContext';
 
-
-export default function SignIn(){
-    // Usando as rotas - using the routes
-    const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
+export default function UserRegister(){
+    const [name, setName] = useState('');
+    const [age, setAge] = useState('');
+    const [nameUser, setNameUser] = useState('');
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -24,26 +19,26 @@ export default function SignIn(){
     // CHAMANDO O CONTEXT - CALLING THE CONTEXT
     const { signIn, loading, signInError } = useContext(AuthContext);
 
-    async function hendleLogin(){
-       if(email === '' || password === ''){
-        setMessage('Ops, preencha os campos!');
-        return;
-       }
-
-       await signIn({email, password});
-    }
-
-    async function openRegister(){
-        // ABRINDO TELA DE CADSTRO - OPENING REGISTRATION SCREEN
-        navigation.navigate('UserRegister');
+    async function hendleRegister(){
+        if(name === '' || age === '' || nameUser === '' || email === '' || password === ''){
+            setMessage('Ops, preencha os campos!');
+            return;
+        }
     }
 
     return(
         <View style={styles.container}>
             <Text style={styles.textTitle}>
-                Login
+                Cadastro
             </Text>
             <View style={styles.inputContainer}>
+
+                <TextInput style={styles.input} placeholder='Informe seu nome' placeholderTextColor={'#023E73'} value={name} onChangeText={setName}/>
+
+                <TextInput style={styles.input} placeholder='Informe sua idade ex: 20' placeholderTextColor={'#023E73'} value={age} onChangeText={setAge}/>
+
+                <TextInput style={styles.input} secureTextEntry={true} placeholder='Informe nome de usuário' placeholderTextColor={'#023E73'} value={nameUser} onChangeText={setNameUser}/>
+
                 <TextInput style={styles.input} placeholder='Informe seu e-mail' placeholderTextColor={'#023E73'} value={email} onChangeText={setEmail}/>
 
                 <TextInput style={styles.input} secureTextEntry={true} placeholder='Informe sua senha' placeholderTextColor={'#023E73'} value={password} onChangeText={setPassword}/>
@@ -51,7 +46,7 @@ export default function SignIn(){
                 {message && <Text style={styles.message}>{message}</Text>}
                 {signInError && <Text style={styles.message}>{signInError}</Text>}
 
-                <TouchableOpacity style={styles.button} onPress={hendleLogin}>
+                <TouchableOpacity style={styles.button} onPress={hendleRegister}>
                     {
                         loading ?
                             <ActivityIndicator size={25} color={'#FFF'}/>
@@ -60,9 +55,9 @@ export default function SignIn(){
                     }                  
                 </TouchableOpacity>
                 
-                <TouchableOpacity style={styles.buttonRegister} onPress={openRegister}>
+                {/* <TouchableOpacity style={styles.buttonRegister} onPress={handleUserRegistration}>
                     <Text style={styles.textButtonRegister}>NÃO TENHO CONTA</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
             </View>
             {message === '' && signInError === '' &&

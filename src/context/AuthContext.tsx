@@ -92,6 +92,8 @@ export function AuthProvider({ children }: AuthProviderProps){
                         token
                     })
                 }
+
+                setLoading(false);
             })
             .catch(error => {
                 console.log(`Error: ${error}`);
