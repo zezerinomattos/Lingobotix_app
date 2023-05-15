@@ -11,14 +11,16 @@ type AuthContextDate = {
     loading: boolean;
     signOut: () => Promise <void>;
     signInError: string;
+    registerUser: (credentials: UserRegisterProps) => Promise <void>;
 }
 
 type UserProps = {
     id: string;
     email: string;
     token: string;
-    // name: string;
-    // idade: string;
+    name: string;
+    age: string;
+    nameUser: string;
 }
 
 type AuthProviderProps = {
@@ -30,6 +32,14 @@ type SignInProps ={
     password: string;
 }
 
+type UserRegisterProps = {
+    name: string; 
+    age: string;
+    nameUser: string;
+    email: string 
+    password: string;
+}
+
 export const AuthContext = createContext({} as AuthContextDate);
 
 export function AuthProvider({ children }: AuthProviderProps){
@@ -37,6 +47,9 @@ export function AuthProvider({ children }: AuthProviderProps){
         id: '',
         email: '',
         token: '',
+        name: '',
+        age: '',
+        nameUser: '',
     });
 
     const [loading, setLoading] = useState(false)
@@ -57,6 +70,9 @@ export function AuthProvider({ children }: AuthProviderProps){
                     id: hasUser.id,
                     email: hasUser.email,
                     token: hasUser.token,
+                    name: hasUser.name,
+                    age: hasUser.age,
+                    nameUser: hasUser.nameUser,
                 })
             }
             setLoadingAuth(false);
@@ -89,7 +105,10 @@ export function AuthProvider({ children }: AuthProviderProps){
                     setUser({
                         id,
                         email,
-                        token
+                        token,
+                        name: '',
+                        age: '',
+                        nameUser: ''
                     })
                 }
 
@@ -110,13 +129,38 @@ export function AuthProvider({ children }: AuthProviderProps){
                 setUser({
                     id: '',
                     email: '',
-                    token: ''
+                    token: '',
+                    name: '',
+                    age: '',
+                    nameUser: ''
                 });
             })
     }
 
+    // FUNÇÃO DE CADASTRO DE USUÁRIO - USER REGISTRATION FUNCTION
+    async function registerUser({name, age, nameUser ,email, password }: UserRegisterProps){
+        setLoading(true);
+
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then((response) => {
+                if (response.user !== null) {
+                    firebase.database().ref('users').child(response.user.uid).set({
+                        name: name,
+                        age: age,
+                        nameUser: nameUser
+                    })
+                }
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.log(`Error: ${error}`);
+                setSignInError('Algo deu errado, verifique seus dados e tente novamente!');
+                setLoading(false);
+            })
+    }
+
     return(
-        <AuthContext.Provider value={{ user, isAuthenticated, signIn, loadingAuth, loading, signOut, signInError }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, signIn, loadingAuth, loading, signOut, signInError, registerUser }}>
             {children}
         </AuthContext.Provider>
     )
