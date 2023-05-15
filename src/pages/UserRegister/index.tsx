@@ -1,19 +1,13 @@
 import React, {useState, useContext} from 'react';
 import { View, Text, TouchableOpacity, TextInput, Image, ActivityIndicator } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-import { StackParamsList } from '../../routes/auth.routes';
-
 // MY IMPORTS
 import styles from './styles';
 
 import { AuthContext } from '../../context/AuthContext';
 
+
 export default function UserRegister(){
-    // Usando as rotas - using the routes
-    const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
 
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
@@ -28,18 +22,15 @@ export default function UserRegister(){
     const { registerUser, loading, signInError } = useContext(AuthContext);
 
     async function hendleRegister(){
-        if(name === '' || age === '' || nameUser === '' || email === '' || password === ''){
+        if(name === '' || age === '' || email === '' || password === ''){
             setMessage('Ops, preencha os campos!');
             return;
         }
 
-        await registerUser({ name, age, nameUser ,email, password });
+        await registerUser({ name, age ,email, password });
 
     }
 
-    function login(){
-        navigation.navigate('SignIn');
-    }
 
     return(
         <View style={styles.container}>
@@ -51,8 +42,6 @@ export default function UserRegister(){
                 <TextInput style={styles.input} placeholder='Informe seu nome' placeholderTextColor={'#023E73'} value={name} onChangeText={setName}/>
 
                 <TextInput style={styles.input} placeholder='Informe sua idade ex: 20' placeholderTextColor={'#023E73'} value={age} onChangeText={setAge}/>
-
-                <TextInput style={styles.input} placeholder='Informe nome de usuário' placeholderTextColor={'#023E73'} value={nameUser} onChangeText={setNameUser}/>
 
                 <TextInput style={styles.input} placeholder='Informe seu e-mail' placeholderTextColor={'#023E73'} value={email} onChangeText={setEmail}/>
 
@@ -69,10 +58,6 @@ export default function UserRegister(){
                             <Text style={styles.textButton}>Entrar</Text>
                     }                  
                 </TouchableOpacity>
-                
-                {/* <TouchableOpacity style={styles.buttonRegister} onPress={login}>
-                    <Text style={styles.textButtonRegister}>JÁ TENHO UMA CONTA</Text>
-                </TouchableOpacity> */}
 
             </View>
             {message === '' && signInError === '' &&

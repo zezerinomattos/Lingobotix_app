@@ -34,6 +34,7 @@ export default function SignIn(){
     }
 
     async function openRegister(){
+        setMessage('');
         // ABRINDO TELA DE CADSTRO - OPENING REGISTRATION SCREEN
         navigation.navigate('UserRegister');
     }

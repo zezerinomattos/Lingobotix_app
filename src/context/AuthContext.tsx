@@ -1,6 +1,11 @@
 import React, {useState, createContext, ReactNode, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { StackParamsList } from '../routes/auth.routes';
+
 import firebase from '../services/firebase';
 
 type AuthContextDate = {
@@ -20,7 +25,6 @@ type UserProps = {
     token: string;
     name: string;
     age: string;
-    nameUser: string;
 }
 
 type AuthProviderProps = {
@@ -35,7 +39,6 @@ type SignInProps ={
 type UserRegisterProps = {
     name: string; 
     age: string;
-    nameUser: string;
     email: string 
     password: string;
 }
@@ -49,7 +52,6 @@ export function AuthProvider({ children }: AuthProviderProps){
         token: '',
         name: '',
         age: '',
-        nameUser: '',
     });
 
     const [loading, setLoading] = useState(false)
@@ -57,6 +59,8 @@ export function AuthProvider({ children }: AuthProviderProps){
     const [signInError, setSignInError] = useState('');
 
     const isAuthenticated = !!user.email;
+
+    const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
 
     useEffect(() => {
         async function getUser(){
@@ -72,7 +76,6 @@ export function AuthProvider({ children }: AuthProviderProps){
                     token: hasUser.token,
                     name: hasUser.name,
                     age: hasUser.age,
-                    nameUser: hasUser.nameUser,
                 })
             }
             setLoadingAuth(false);
@@ -110,7 +113,6 @@ export function AuthProvider({ children }: AuthProviderProps){
                                 token,
                                 name: userData?.name || '',
                                 age: userData?.age || '',
-                                nameUser: userData?.nameUser || '',
                             })
                         });
                 }
@@ -135,25 +137,50 @@ export function AuthProvider({ children }: AuthProviderProps){
                     token: '',
                     name: '',
                     age: '',
-                    nameUser: ''
                 });
             })
     }
 
     // FUNÇÃO DE CADASTRO DE USUÁRIO - USER REGISTRATION FUNCTION
-    async function registerUser({name, age, nameUser ,email, password }: UserRegisterProps){
+    async function registerUser({name, age ,email, password }: UserRegisterProps){
         setLoading(true);
 
         firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then((response) => {
+            .then(async(response) => {
                 if (response.user !== null) {
                     firebase.database().ref('users').child(response.user.uid).set({
                         name: name,
                         age: age,
-                        nameUser: nameUser
                     })
                 }
+
                 setLoading(false);
+
+                // Atualizar a autenticação do usuário
+                const user = await firebase.auth().currentUser;
+
+                if (user) {
+                    const id = user.uid;
+                    const token = await user.getIdToken();
+                    const email = user.email || '';
+
+                    // const { uid, email, refreshToken } = response.user;
+                    const data = { id, email, token, name, age };
+
+                    AsyncStorage.setItem('@lingobotix', JSON.stringify(data));
+    
+                    setUser({
+                        id,
+                        email,
+                        token,
+                        name,
+                        age,
+                    });
+                }
+
+                // Carregar os dados do usuário do AsyncStorage
+                loadUserFromStorage();
+                
             })
             .catch((error) => {
                 console.log(`Error: ${error}`);
@@ -161,6 +188,67 @@ export function AuthProvider({ children }: AuthProviderProps){
                 setLoading(false);
             })
     }
+
+    // FUNÇÃO DE CADASTRO DE USUÁRIO - USER REGISTRATION FUNCTION
+    // async function registerUser1({name, age ,email, password }: UserRegisterProps){
+    //     setLoading(true);
+    
+    //     try {
+    //         const response = await firebase.auth().createUserWithEmailAndPassword(email, password);
+    
+    //         if (response.user !== null) {
+    //             await firebase.database().ref('users').child(response.user.uid).set({
+    //                 name: name,
+    //                 age: age,
+    //             });
+    
+    //             setLoading(false);
+    
+    //             // Atualizar a autenticação do usuário
+    //             const user = await firebase.auth().currentUser;
+    
+    //             if (user) {
+    //                 const id = user.uid;
+    //                 const token = await user.getIdToken();
+    //                 const email = user.email || '';
+
+    //                 // const { uid, email, refreshToken } = response.user;
+    //                 const data = { id, email, token, name, age };
+
+    //                 AsyncStorage.setItem('@lingobotix', JSON.stringify(data));
+    
+    //                 setUser({
+    //                     id,
+    //                     email,
+    //                     token,
+    //                     name,
+    //                     age,
+    //                 });
+    //             }
+    //             // Carregar os dados do usuário do AsyncStorage
+    //             loadUserFromStorage();
+    //         }
+    //     } catch (error) {
+    //         console.log(`Error: ${error}`);
+    //         setSignInError('Algo deu errado, verifique seus dados e tente novamente!');
+    //         setLoading(false);
+    //     }
+    // }
+
+    //FUNÇÃO PARA CARREGAR ASYNCSTORAGE QUANDO CADASTRADO O USUÁRIO
+    
+    async function loadUserFromStorage() {
+        try {
+          const data = await AsyncStorage.getItem('@lingobotix');
+          if (data) {
+            const { id, email, token, name, age } = JSON.parse(data);
+            setUser({ id, email, token, name, age });
+          }
+        } catch (error) {
+          console.log(`Error: ${error}`);
+        }
+    }
+    
 
     return(
         <AuthContext.Provider value={{ user, isAuthenticated, signIn, loadingAuth, loading, signOut, signInError, registerUser }}>
