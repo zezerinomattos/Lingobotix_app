@@ -39,7 +39,7 @@ export default function Home(){
     const [modalInformationVisible, setModalInformationVisible] = useState(false);
     const[levelInformation, setLevelInformation] = useState<string[]>(['']);
 
-    const { signOut } = useContext(AuthContext);
+    const { signOut, user } = useContext(AuthContext);
 
     // FUNÇÃO DE ONPRESS DO BOTÃO DE INFORMAÇÃO DO NIVEL
     function handleInformationButton(title: string, information: string){
@@ -51,6 +51,8 @@ export default function Home(){
     return(
         <View style={styles.container}>
             <Header />
+
+            <Text>{user.name}</Text>
             
             <FlatList 
                 showsVerticalScrollIndicator={false}

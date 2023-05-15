@@ -100,16 +100,19 @@ export function AuthProvider({ children }: AuthProviderProps){
 
                     AsyncStorage.setItem('@lingobotix', JSON.stringify(data));
 
-                    // DISPONIBILIZANDO O TOKEN PARA AS ROTAS - MAKING THE TOKEN AVAILABLE FOR THE ROUTES
-
-                    setUser({
-                        id,
-                        email,
-                        token,
-                        name: '',
-                        age: '',
-                        nameUser: ''
-                    })
+                    const userRef = firebase.database().ref('users').child(response.user.uid);
+                        userRef.once('value', (snapshot) => {
+                            const userData = snapshot.val();                   
+                            
+                            setUser({
+                                id,
+                                email,
+                                token,
+                                name: userData?.name || '',
+                                age: userData?.age || '',
+                                nameUser: userData?.nameUser || '',
+                            })
+                        });
                 }
 
                 setLoading(false);

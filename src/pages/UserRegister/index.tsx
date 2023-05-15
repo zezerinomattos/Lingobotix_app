@@ -37,6 +37,10 @@ export default function UserRegister(){
 
     }
 
+    function login(){
+        navigation.navigate('SignIn');
+    }
+
     return(
         <View style={styles.container}>
             <Text style={styles.textTitle}>
@@ -66,8 +70,8 @@ export default function UserRegister(){
                     }                  
                 </TouchableOpacity>
                 
-                {/* <TouchableOpacity style={styles.buttonRegister} onPress={handleUserRegistration}>
-                    <Text style={styles.textButtonRegister}>NÃO TENHO CONTA</Text>
+                {/* <TouchableOpacity style={styles.buttonRegister} onPress={login}>
+                    <Text style={styles.textButtonRegister}>JÁ TENHO UMA CONTA</Text>
                 </TouchableOpacity> */}
 
             </View>
