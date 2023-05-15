@@ -10,6 +10,7 @@ import { AuthContext } from '../../context/AuthContext';
 export default function UserRegister(){
 
     const [name, setName] = useState('');
+    const [sobrenome, setSobrenome] = useState('');
     const [age, setAge] = useState('');
     const [nameUser, setNameUser] = useState('');
 
@@ -22,13 +23,11 @@ export default function UserRegister(){
     const { registerUser, loading, signInError } = useContext(AuthContext);
 
     async function hendleRegister(){
-        if(name === '' || age === '' || email === '' || password === ''){
+        if(name === '' || sobrenome === '' || age === '' || email === '' || password === ''){
             setMessage('Ops, preencha os campos!');
             return;
         }
-
-        await registerUser({ name, age ,email, password });
-
+        await registerUser({ name, sobrenome, age ,email, password });
     }
 
 
@@ -41,7 +40,9 @@ export default function UserRegister(){
 
                 <TextInput style={styles.input} placeholder='Informe seu nome' placeholderTextColor={'#023E73'} value={name} onChangeText={setName}/>
 
-                <TextInput style={styles.input} placeholder='Informe sua idade ex: 20' placeholderTextColor={'#023E73'} value={age} onChangeText={setAge}/>
+                <TextInput style={styles.input} placeholder='Informe seu sobrenome' placeholderTextColor={'#023E73'} value={sobrenome} onChangeText={setSobrenome}/>
+
+                <TextInput style={styles.input} keyboardType='numeric' placeholder='Informe sua idade ex: 20' placeholderTextColor={'#023E73'} value={age} onChangeText={setAge}/>
 
                 <TextInput style={styles.input} placeholder='Informe seu e-mail' placeholderTextColor={'#023E73'} value={email} onChangeText={setEmail}/>
 

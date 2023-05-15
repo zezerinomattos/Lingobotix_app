@@ -51,8 +51,6 @@ export default function Home(){
     return(
         <View style={styles.container}>
             <Header />
-
-            <Text>{user.name}</Text>
             
             <FlatList 
                 showsVerticalScrollIndicator={false}

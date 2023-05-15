@@ -16,7 +16,9 @@ type AuthContextDate = {
     loading: boolean;
     signOut: () => Promise <void>;
     signInError: string;
+    messageSuccess: string;
     registerUser: (credentials: UserRegisterProps) => Promise <void>;
+    passwordRecover: (credentials: PasswordRecoverProps) => Promise <void>;
 }
 
 type UserProps = {
@@ -25,6 +27,7 @@ type UserProps = {
     token: string;
     name: string;
     age: string;
+    sobrenome: string;
 }
 
 type AuthProviderProps = {
@@ -41,6 +44,11 @@ type UserRegisterProps = {
     age: string;
     email: string 
     password: string;
+    sobrenome: string;
+}
+
+type PasswordRecoverProps ={
+    email: string;
 }
 
 export const AuthContext = createContext({} as AuthContextDate);
@@ -51,12 +59,14 @@ export function AuthProvider({ children }: AuthProviderProps){
         email: '',
         token: '',
         name: '',
+        sobrenome: '',
         age: '',
     });
 
     const [loading, setLoading] = useState(false)
     const [loadingAuth, setLoadingAuth] = useState(true)
     const [signInError, setSignInError] = useState('');
+    const [messageSuccess, setMessageSuccess] = useState('');
 
     const isAuthenticated = !!user.email;
 
@@ -75,6 +85,7 @@ export function AuthProvider({ children }: AuthProviderProps){
                     email: hasUser.email,
                     token: hasUser.token,
                     name: hasUser.name,
+                    sobrenome: hasUser.sobrenome,
                     age: hasUser.age,
                 })
             }
@@ -112,6 +123,7 @@ export function AuthProvider({ children }: AuthProviderProps){
                                 email,
                                 token,
                                 name: userData?.name || '',
+                                sobrenome: userData?.sobrenome || '',
                                 age: userData?.age || '',
                             })
                         });
@@ -122,7 +134,7 @@ export function AuthProvider({ children }: AuthProviderProps){
             .catch(error => {
                 console.log(`Error: ${error}`);
                 setLoading(false);
-                setSignInError('Ops, Verefique seus dados, algo deu errado!');
+                setSignInError('Ops, Verefique seus dados ou reinicie o aplicativo, algo deu errado!');
             });
 
     }
@@ -136,13 +148,15 @@ export function AuthProvider({ children }: AuthProviderProps){
                     email: '',
                     token: '',
                     name: '',
+                    sobrenome: '',
                     age: '',
                 });
+
             })
     }
 
     // FUNÇÃO DE CADASTRO DE USUÁRIO - USER REGISTRATION FUNCTION
-    async function registerUser({name, age ,email, password }: UserRegisterProps){
+    async function registerUser({name, sobrenome, age ,email, password }: UserRegisterProps){
         setLoading(true);
 
         firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -150,6 +164,7 @@ export function AuthProvider({ children }: AuthProviderProps){
                 if (response.user !== null) {
                     firebase.database().ref('users').child(response.user.uid).set({
                         name: name,
+                        sobrenome: sobrenome,
                         age: age,
                     })
                 }
@@ -165,7 +180,7 @@ export function AuthProvider({ children }: AuthProviderProps){
                     const email = user.email || '';
 
                     // const { uid, email, refreshToken } = response.user;
-                    const data = { id, email, token, name, age };
+                    const data = { id, email, token, name, sobrenome, age };
 
                     AsyncStorage.setItem('@lingobotix', JSON.stringify(data));
     
@@ -174,6 +189,7 @@ export function AuthProvider({ children }: AuthProviderProps){
                         email,
                         token,
                         name,
+                        sobrenome,
                         age,
                     });
                 }
@@ -183,75 +199,56 @@ export function AuthProvider({ children }: AuthProviderProps){
                 
             })
             .catch((error) => {
-                console.log(`Error: ${error}`);
-                setSignInError('Algo deu errado, verifique seus dados e tente novamente!');
+                console.log(`Error: ${error.message}`);
+                //setSignInError('Algo deu errado, verifique seus dados e tente novamente!');
                 setLoading(false);
+
+                switch (error.message) {
+                    case 'Password should be at least 6 characters':
+                        setSignInError('A senha de ter pelo menos 6 caracteres!');
+                        break;
+                    case 'The email address is already in use by another account.':
+                        setSignInError('Este email já está sendo utilizado por outro usuário!');
+                        break;
+                    case 'The email address is badly formatted.':
+                        setSignInError('O formato do seu email é invalido!');
+                        break;
+                 
+                    default:
+                        setSignInError('Não foi possivel cadastrar. tente novamente mais tarde!');
+                        break;
+                 }
             })
     }
 
-    // FUNÇÃO DE CADASTRO DE USUÁRIO - USER REGISTRATION FUNCTION
-    // async function registerUser1({name, age ,email, password }: UserRegisterProps){
-    //     setLoading(true);
-    
-    //     try {
-    //         const response = await firebase.auth().createUserWithEmailAndPassword(email, password);
-    
-    //         if (response.user !== null) {
-    //             await firebase.database().ref('users').child(response.user.uid).set({
-    //                 name: name,
-    //                 age: age,
-    //             });
-    
-    //             setLoading(false);
-    
-    //             // Atualizar a autenticação do usuário
-    //             const user = await firebase.auth().currentUser;
-    
-    //             if (user) {
-    //                 const id = user.uid;
-    //                 const token = await user.getIdToken();
-    //                 const email = user.email || '';
-
-    //                 // const { uid, email, refreshToken } = response.user;
-    //                 const data = { id, email, token, name, age };
-
-    //                 AsyncStorage.setItem('@lingobotix', JSON.stringify(data));
-    
-    //                 setUser({
-    //                     id,
-    //                     email,
-    //                     token,
-    //                     name,
-    //                     age,
-    //                 });
-    //             }
-    //             // Carregar os dados do usuário do AsyncStorage
-    //             loadUserFromStorage();
-    //         }
-    //     } catch (error) {
-    //         console.log(`Error: ${error}`);
-    //         setSignInError('Algo deu errado, verifique seus dados e tente novamente!');
-    //         setLoading(false);
-    //     }
-    // }
-
-    //FUNÇÃO PARA CARREGAR ASYNCSTORAGE QUANDO CADASTRADO O USUÁRIO
-    
+    //FUNÇÃO PARA CARREGAR ASYNCSTORAGE QUANDO CADASTRADO O USUÁRIO    
     async function loadUserFromStorage() {
         try {
           const data = await AsyncStorage.getItem('@lingobotix');
           if (data) {
-            const { id, email, token, name, age } = JSON.parse(data);
-            setUser({ id, email, token, name, age });
+            const { id, email, token, name, sobrenome, age } = JSON.parse(data);
+            setUser({ id, email, token, name, sobrenome, age });
           }
         } catch (error) {
           console.log(`Error: ${error}`);
         }
     }
     
+    // FUNÇÃO DE RECUPERAR SENHA - PASSWORD RECOVER FUNCTION
+    async function passwordRecover({ email }: PasswordRecoverProps){
+
+        firebase.auth().sendPasswordResetEmail(email)
+            .then(response => {
+                setMessageSuccess('Enviamos um link no seu email para você redefinir a senha! Verifique também a sua caixa de SPAN e não esqueça de reiniciar o aplicativo.');
+
+            })
+            .catch(error => {
+                setSignInError('Verifique se o email está correto!');
+            })
+    }
 
     return(
-        <AuthContext.Provider value={{ user, isAuthenticated, signIn, loadingAuth, loading, signOut, signInError, registerUser }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, signIn, loadingAuth, loading, signOut, signInError, registerUser, messageSuccess,  passwordRecover}}>
             {children}
         </AuthContext.Provider>
     )

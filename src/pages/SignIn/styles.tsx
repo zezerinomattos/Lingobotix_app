@@ -67,6 +67,15 @@ const styles = StyleSheet.create({
         color: '#E3371E',
         fontSize: 18,
         fontWeight: 'bold', 
+    },
+
+    buttonPasswordReset:{
+        width: '95%',
+        height: 40,
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 5,
     }
 });
 
