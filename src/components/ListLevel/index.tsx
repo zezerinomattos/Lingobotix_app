@@ -1,6 +1,11 @@
 import React, {useState} from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { StackParamsList } from '../../routes/app.routes';
+
 // MY IMPORTS
 import styles from './styles';
 
@@ -14,11 +19,18 @@ interface LevelProps {
         buttonThree: string;
         buttonFour: string;
         information: string;
+        infoStartChat: string;
     };
     onPress: (information: string, title: string) => void;
 }
 
 export function ListLevel({ data, onPress }: LevelProps){
+
+    const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
+
+    function hendleLessonOne(){
+        navigation.navigate('Conversation', {infoStartChat: data.infoStartChat});
+    }
 
     return(
         <View style={[styles.container, {backgroundColor: data.style}]}>
@@ -30,7 +42,7 @@ export function ListLevel({ data, onPress }: LevelProps){
                 </TouchableOpacity>               
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={hendleLessonOne}>
                     <Text style={styles.buttonText}>{data.buttonOne}</Text>
                 </TouchableOpacity>
 
