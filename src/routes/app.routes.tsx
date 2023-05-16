@@ -9,7 +9,10 @@ import Conversation from '../pages/Conversation';
 export type StackParamsList = {
     Home: undefined;
     Conversation: {
+        id: string;
         infoStartChat: string;
+        title: string;
+        button: string;
     };
 }
 

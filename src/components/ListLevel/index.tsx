@@ -29,7 +29,12 @@ export function ListLevel({ data, onPress }: LevelProps){
     const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
 
     function hendleLessonOne(){
-        navigation.navigate('Conversation', {infoStartChat: data.infoStartChat});
+        navigation.navigate('Conversation', {
+            id: data.id,
+            infoStartChat: data.infoStartChat,
+            title: data.title,
+            button: data.buttonOne,
+        });
     }
 
     return(
@@ -41,6 +46,7 @@ export function ListLevel({ data, onPress }: LevelProps){
                     <Image source={require('../../images/book.png')} style={{width: 30}} resizeMode="contain"  />
                 </TouchableOpacity>               
             </View>
+            
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={hendleLessonOne}>
                     <Text style={styles.buttonText}>{data.buttonOne}</Text>
