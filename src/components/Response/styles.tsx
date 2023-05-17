@@ -21,10 +21,22 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         paddingHorizontal: 10,
         paddingVertical: 5,
-        flexWrap: 'wrap',
         lineHeight: 22,
         backgroundColor: '#023E73',
         color: '#FFF',
+    },
+    nemeUserContainer: {
+        width: 50,
+        height: 50,
+        borderRadius: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#BF6415',
+        marginRight: 5
+    },
+    textNameUser: {
+        color: '#FFF',
+        fontSize: 20,
     }
 });
 

@@ -4,18 +4,31 @@ import { View, Text, Image } from 'react-native';
 // MY IMPORTS
 import styles from './styles';
 
-type ListProps = {
-    id: string;
-    name: string;   
+type ResponseProps = {
+    responseGPT: string;
+    chatUser: string;
+    nameUser: string;  
 }
 
-export function Response(){
+export function Response({ responseGPT, chatUser, nameUser }: ResponseProps){
     return(
         <View style={styles.container}>
-            <Image source={require('../../images/imgResponse.png')} style={styles.imgRespnse} resizeMode='contain'/>
-            <Text style={styles.textResponse}>
-                Neste exemplo, a possui uma borda com largura de 2 pixels, cor preta e um raio de
-            </Text>
+
+            {
+                responseGPT ? <Image source={require('../../images/imgResponse.png')} style={styles.imgRespnse} resizeMode='contain'/>
+                :
+                <View style={styles.nemeUserContainer}>
+                    <Text style={styles.textNameUser}>{nameUser}</Text>
+                </View>
+            }           
+
+            {
+                chatUser && <Text style={styles.textResponse}>{chatUser}</Text>
+            }
+            {
+                responseGPT && <Text style={styles.textResponse}>{responseGPT}</Text>
+            }
+            
         </View>
     );
 }

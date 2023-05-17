@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Lingobotix",
+    "slug": "Lingobotix",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/LingoIcon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/imgResponse.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#083359"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/LingoIcon.png",
+        "backgroundColor": "#083359"
+      }
+    },
+    "web": {
+      "favicon": "./assets/LingoIcon"
+    }
+  }
+}
