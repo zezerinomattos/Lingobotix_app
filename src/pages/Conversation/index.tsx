@@ -79,7 +79,7 @@ export default function Conversation(){
 
             let controllerResponse = response.data.choices[0].text;
 
-            if(controllerResponse.length < 121){
+            if(controllerResponse.length < 200){
                 speakResponseGPTEnglish(response.data.choices[0].text)
             }else{
 
