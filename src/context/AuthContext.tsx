@@ -108,11 +108,11 @@ export function AuthProvider({ children }: AuthProviderProps){
                     const { uid: id, refreshToken: token } = response.user
                     let email = response.user.email ?? '';
 
-                    const data = {
-                        ...response.user
-                    }
+                    // const data = {
+                    //     ...response.user,
+                    // }
 
-                    AsyncStorage.setItem('@lingobotix', JSON.stringify(data));
+                    // AsyncStorage.setItem('@lingobotix', JSON.stringify(data));
 
                     const userRef = firebase.database().ref('users').child(response.user.uid);
                         userRef.once('value', (snapshot) => {
@@ -126,7 +126,11 @@ export function AuthProvider({ children }: AuthProviderProps){
                                 sobrenome: userData?.sobrenome || '',
                                 age: userData?.age || '',
                             })
+
+                            const data = { id, token, email, ...userData } 
+                            AsyncStorage.setItem('@lingobotix', JSON.stringify(data));
                         });
+
                 }
 
                 setLoading(false);
