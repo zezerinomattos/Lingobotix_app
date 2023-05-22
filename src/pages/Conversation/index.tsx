@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext} from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, Keyboard  } from 'react-native';
 import { FontAwesome, Feather } from '@expo/vector-icons';
+import * as Speech from 'expo-speech';
 
 import { useRoute, RouteProp } from '@react-navigation/native';
 
@@ -35,6 +36,8 @@ export default function Conversation(){
     const [chatUser, setChatUser] = useState('');
     const[renderConversation, setRenderConversation] = useState('');
     const [responseGPT, setResponseGPT] = useState('');
+    //const [controllerResponse, setControllerResponse] = useState('');
+
     const [nameUser, setNameUser] = useState(`${user.name.charAt(0).toUpperCase()}${user.sobrenome.charAt(0).toUpperCase()}`);
 
     async function generateText() {
@@ -42,23 +45,21 @@ export default function Conversation(){
 
         setRenderConversation(chatUser);
         const prompt = `
-            Olá, ChatGPT! Gostaria de praticar conversação em inglês no nível ${route.params.title}, especificamente sobre ${route.params.button}. Por favor, responda às minhas perguntas e forneça exemplos adequados para o meu nível de conhecimento. Vamos começar! Não fuja dos temas que vou te fornecer, mesmo que por algum motivo eu saia deles, nesse caso me corrija trazendo a conversa para esse nível e tema. 
+            Olá! Gostaria de praticar conversação em inglês no nível ${route.params.title}, especificamente sobre ${route.params.button}. Por favor, responda às minhas perguntas e forma adequada para o meu nível de conhecimento. Vamos começar! Não fuja do tema e nivel que estou.
             Regras da nossa conversa: 
             1 – Eu falo você responde:
-            2 – Você pode dar feedbacks curtos e objetivos em caso de meu texto estar com erros na escrita ou colocação:
-            3 – A cada resposta que você me der você pode vir a dar o feedback se necessário se não houver erros, pare de falar e espera minha resposta ou pergunta.  
-            4 – Em hipótese alguma permita palavras ofensivas, preconceituosas, homofóbicas, xenofóbicas.
-            5 – Em caso de houver alguma das palavras do item 4 emita uma mensagem de repudio e diga que nosso Aplicativo não aceita esse tipo de palavras e se continuar o usuário vai ser banido.   
-            6- Em hipótese alguma fuja do meu nível, você pode fazer variações de respostas mas não pode fugir do nível e assunto ${route.params.button}.
+            2 – Você pode dar feedbacks curticimos e objetivos em caso de meu texto estar com erros na escrita ou colocação:
+            3 – Em hipótese alguma permita palavras ofensivas, preconceituosas, homofóbicas, xenofóbicas.
+            4 – Em caso de houver alguma das palavras do item 3 emita uma mensagem de repudio e diga que nosso Aplicativo não aceita esse tipo de palavras e se continuar o usuário vai ser banido.   
+            5- Em hipótese alguma fuja do meu nível, você pode fazer variações de respostas mas não pode fugir do nível e assunto ${route.params.button}.
             Tópicos examinados nesse nível:
-            ${route.params.button}, informal and formal, approach and fluid conversation, that you are your name sera Lingobotix and you are an English teacher
-            Aqui vai minha pergunta: ${chatUser} return in American English only       
+            ${route.params.button} - voce vai assumir de forma hipotetica que é meu professor de inglês, seu nome é professor Lingobotix
+            Let's start our English teacher class. Eu: ${chatUser} retorne apenas em inglês americano.      
         `
         // const prompt = chatUser;
         const model = 'text-davinci-002';
         const maxTokens = 2048;
 
-        //const REACT_APP_OPENAI_API_KEY = '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';
         const REACT_APP_OPENAI_API_KEY = OPENAI_API_KEY;
 
         await api_openai.post('/completions', {
@@ -75,11 +76,32 @@ export default function Conversation(){
             //console.log(response.data.choices[0].text);
             setResponseGPT(response.data.choices[0].text);
             setChatUser('');
+
+            let controllerResponse = response.data.choices[0].text;
+
+            if(controllerResponse.length < 121){
+                speakResponseGPTEnglish(response.data.choices[0].text)
+            }else{
+
+            }
+
         })
         .catch(error => {
             console.error(error);
         })
         
+    }
+
+    function speakResponseGPTEnglish(response: string){
+        Speech.speak(response, {
+            language: 'en'
+        });
+    }
+
+    function speakResponseGPTPortuguese(response: string){
+        Speech.speak(response, {
+            language: 'pt-BR'
+        });
     }
 
     return(
