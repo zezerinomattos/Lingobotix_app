@@ -16,21 +16,10 @@ import { AuthContext } from '../../context/AuthContext';
 import api_openai from '../../services/api_openai';
 import { OPENAI_API_KEY } from '../../../environmentVariables';
 
-// TYPANDO O USEROUT
-type RouteInfoChatParams = {
-    Conversation: {
-        id: string;
-        infoStartChat: string;
-        title: string;
-        button: string;
-    };
-}
-
-type InfoChatRouteProps = RouteProp<RouteInfoChatParams, 'Conversation'>;
 
 export default function Conversation(){
 
-    const route = useRoute<InfoChatRouteProps>();
+    const route = useRoute();
     const { signOut, user } = useContext(AuthContext);
 
     const [chatUser, setChatUser] = useState('');
@@ -44,18 +33,8 @@ export default function Conversation(){
         setResponseGPT('');
 
         setRenderConversation(chatUser);
-        const prompt = `
-            Olá! Gostaria de praticar conversação em inglês no nível ${route.params.title}, especificamente sobre ${route.params.button}. Por favor, responda às minhas perguntas e forma adequada para o meu nível de conhecimento. Vamos começar! Não fuja do tema e nivel que estou.
-            Regras da nossa conversa: 
-            1 – Eu falo você responde:
-            2 – Você pode dar feedbacks curticimos e objetivos em caso de meu texto estar com erros na escrita ou colocação:
-            3 – Em hipótese alguma permita palavras ofensivas, preconceituosas, homofóbicas, xenofóbicas.
-            4 – Em caso de houver alguma das palavras do item 3 emita uma mensagem de repudio e diga que nosso Aplicativo não aceita esse tipo de palavras e se continuar o usuário vai ser banido.   
-            5- Em hipótese alguma fuja do meu nível, você pode fazer variações de respostas mas não pode fugir do nível e assunto ${route.params.button}.
-            Tópicos examinados nesse nível:
-            ${route.params.button} - voce vai assumir de forma hipotetica que é meu professor de inglês, seu nome é professor Lingobotix
-            Let's start our English teacher class. Eu: ${chatUser} retorne apenas em inglês americano.      
-        `
+        const prompt = `Hello, I would like to practice English conversation with you. Let's hypothetically assume your name is Lingobotix, my study companion for American English. We're going to engage in a fluent conversation where you'll adapt to my level, regardless of whether I'm a beginner, basic, intermediate, or advanced learner. Please respond appropriately according to my level of knowledge. Let's begin! Your responses should be concise and fluid, and you can vary your answers, but they should stay within my level. Your responses will be in American English, and if I make a mistake in a sentence or word, please correct me by asking if I meant something else and provide the correct phrase or word. Here I go: ${chatUser}`;
+        
         // const prompt = chatUser;
         const model = 'text-davinci-002';
         const maxTokens = 2048;
@@ -108,11 +87,11 @@ export default function Conversation(){
         <View style={styles.container} >
             <Header />
 
-            <View style={styles.TitlesContainer}>
+            {/* <View style={styles.TitlesContainer}>
                 <Text style={styles.titleLevel}>{route.params.title}</Text>
 
                 <Text style={styles.titleExercises}>{route.params.button}</Text>
-            </View>
+            </View> */}
 
             <View style={styles.conversationContainer}>
                 {
