@@ -52,6 +52,11 @@ export default function SignIn(){
 
     }
 
+    // FUNÇÃO QUE ENCAMINHA PARA PAGINA DE INFORMAÇÃO - FUNCTION THAT FORWARDS TO THE INFORMATION PAGE
+    function openInformation(){
+        navigation.navigate('Information');
+    }
+
     return(
         <View style={styles.container}>
 
@@ -106,6 +111,10 @@ export default function SignIn(){
 
                         <TouchableOpacity style={styles.buttonPasswordReset} onPress={(() => setPasswordRestart(true))}>
                             <Text style={styles.textButtonRegister}>Esqueci minha senha</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.buttonPasswordReset} onPress={openInformation}>
+                            <Text style={styles.textButtonInformation}>Saiba o que é o Lingobotix</Text>
                         </TouchableOpacity>
 
                     </View>
