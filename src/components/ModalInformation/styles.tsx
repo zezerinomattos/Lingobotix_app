@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         marginBottom: 20,
         marginTop: 10,
-        flexDirection: 'row', 
         alignItems: 'center',
     },
     titleText: {
