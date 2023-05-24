@@ -67,7 +67,7 @@ export default function SignIn(){
             {
                 passwordRestart ? (
                     <View style={styles.inputContainer}>
-                        <TextInput style={styles.input} placeholder='Informe seu e-mail' placeholderTextColor={'#023E73'} value={email} onChangeText={setEmail}/>
+                        <TextInput style={styles.input} placeholder='Informe seu e-mail' placeholderTextColor={'#023E73'} value={email} onChangeText={setEmail} autoCapitalize='none' autoCorrect={false} keyboardType='email-address'/>
 
                             <TouchableOpacity style={styles.button} onPress={hendlePasswordRestart}>
                             {
@@ -89,7 +89,7 @@ export default function SignIn(){
                 )
                 :
                     <View style={styles.inputContainer}>
-                        <TextInput style={styles.input} placeholder='Informe seu e-mail' placeholderTextColor={'#023E73'} value={email} onChangeText={setEmail}/>
+                        <TextInput style={styles.input} placeholder='Informe seu e-mail' placeholderTextColor={'#023E73'} value={email} onChangeText={setEmail} autoCapitalize='none' autoCorrect={false} keyboardType='email-address'/>
 
                         <TextInput style={styles.input} secureTextEntry={true} placeholder='Informe sua senha' placeholderTextColor={'#023E73'} value={password} onChangeText={setPassword}/>
 
