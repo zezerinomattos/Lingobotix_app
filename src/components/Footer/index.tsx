@@ -1,6 +1,11 @@
 import React from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { StackParamsList } from '../../routes/app.routes';
+
 // MY IMPORTS
 import styles from './styles';
 
@@ -9,10 +14,16 @@ interface FooterProps{
 }
 
 export function Footer({ onPress }: FooterProps){
+
+    const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>()
+
+    function hendleNavigatedHome(){
+        navigation.navigate('Home');
+    }
     
     return(
         <View style={styles.container}>
-            <TouchableOpacity >
+            <TouchableOpacity  onPress={hendleNavigatedHome}>
                 <Image source={require('../../images/icone-home.png')} style={{width: 30}} resizeMode="contain" />
             </TouchableOpacity>
 

@@ -23,7 +23,6 @@ export default function Home(){
     const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
     
     const [modalInformationVisible, setModalInformationVisible] = useState(false);
-    const[levelInformation, setLevelInformation] = useState<string[]>(['']);
 
     const { signOut, user } = useContext(AuthContext);
 
@@ -57,20 +56,10 @@ export default function Home(){
                 </View>
             
             </View>
-            
-            {/* <FlatList 
-                showsVerticalScrollIndicator={false}
-                style={styles.listLevel}
-                data={level}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => <ListLevel data={item} onPress={handleInformationButton} />}
-                contentContainerStyle={styles.listContent}
-            /> */}
 
             <Modal transparent={true} visible={modalInformationVisible} animationType='fade'>
                 <ModalInformation 
                     handleCloseModal = {() => setModalInformationVisible(false)}
-                    hendleLevelInformation = {levelInformation}
                 />
             </Modal>
 

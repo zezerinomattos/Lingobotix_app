@@ -5,11 +5,10 @@ import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import styles from './styles';
 
 interface ModalInfoProps {
-    hendleLevelInformation: string[];
     handleCloseModal: () => void;
 }
 
-export function ModalInformation({ handleCloseModal, hendleLevelInformation }: ModalInfoProps){
+export function ModalInformation({ handleCloseModal }: ModalInfoProps){
 
     const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
 
